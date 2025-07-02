@@ -1,0 +1,408 @@
+2nd program (motors)
+
+now, I am going to program the robot that will have to do some paths
+
+initial program
+
+
+
+#define ML_Ctrl 4     // define the direction control pin of B motor
+
+#define ML_PWM 5      //define the PWM control pin of B motor
+
+#define MR_Ctrl 2     //define direction control pin of A motor 
+
+#define MR_PWM 6      //define the PWM control pin of A motor. 
+
+
+
+int velF = 100;
+
+
+
+void setup() {
+
+  pinMode(ML_Ctrl, OUTPUT);
+
+  pinMode(MR_Ctrl, OUTPUT);
+
+  pinMode(ML_PWM, OUTPUT);
+
+  pinMode(MR_PWM, OUTPUT);
+
+}
+
+void loop() {
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, LOW);
+
+  analogWrite(ML_PWM, velF);
+
+  analogWrite(MR_PWM, velF);
+
+  delay(1000);
+
+
+
+------------------------------------------------------->>> Here the robot is going infinitely forward, repeating the steps. 
+
+
+
+2nd modification
+
+#define ML_Ctrl 4     // define the direction control pin of B motor
+
+#define ML_PWM 5      //define the PWM control pin of B motor
+
+#define MR_Ctrl 2     //define direction control pin of A motor 
+
+#define MR_PWM 6      //define the PWM control pin of A motor. 
+
+
+
+int velF = 100;
+
+int velT = 70;
+
+
+
+
+
+void setup() {
+
+  pinMode(ML_Ctrl, OUTPUT);
+
+  pinMode(MR_Ctrl, OUTPUT);
+
+  pinMode(ML_PWM, OUTPUT);
+
+  pinMode(MR_PWM, OUTPUT);
+
+
+
+}
+
+
+
+void loop() {
+
+  front();
+
+  turn90R();
+
+
+
+}
+
+
+
+void front()    {
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, LOW); 
+
+  analogWrite(ML_PWM, velF);
+
+  analogWrite(MR_PWM, velF);
+
+  delay(1000);
+
+
+
+}
+
+
+
+void turn90R() {
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, HIGH);
+
+  analogWrite(ML_PWM, velT);
+
+  analogWrite(MR_PWM, velT);
+
+  delay(710);
+
+}
+
+-------------------------------------------------->>> this way the robot makes 90 degree turns forever, forming a circle
+
+
+
+3rd modification
+
+
+
+#define ML_Ctrl 4     // define the direction control pin of B motor
+
+#define ML_PWM 5      //define the PWM control pin of B motor
+
+#define MR_Ctrl 2     //define direction control pin of A motor 
+
+#define MR_PWM 6      //define the PWM control pin of A motor. 
+
+
+
+int velF = 100;
+
+int velT = 100;
+
+int velMj = 150;
+
+
+
+
+
+void setup() {
+
+  pinMode(ML_Ctrl, OUTPUT);
+
+  pinMode(MR_Ctrl, OUTPUT);
+
+  pinMode(ML_PWM, OUTPUT);
+
+  pinMode(MR_PWM, OUTPUT);
+
+
+
+}
+
+
+
+void loop() {
+
+  front();
+
+  turn90R();
+
+  front();
+
+  turn90L();
+
+
+
+}
+
+void front()  // this makes the car go straight  
+
+{
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, LOW); 
+
+  analogWrite(ML_PWM, velF);
+
+  analogWrite(MR_PWM, velF);
+
+  delay(700);
+
+}
+
+
+
+void turn90R()        // this makes the car turn 90 degrees right
+
+{
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, HIGH);
+
+  analogWrite(ML_PWM, velT);
+
+  analogWrite(MR_PWM, velT);
+
+  delay(320);
+
+}
+
+void turn90L() // this makes the car turn 90 degrees left
+
+{
+
+  digitalWrite(ML_Ctrl, LOW);
+
+  digitalWrite(MR_Ctrl, LOW);
+
+  analogWrite(ML_PWM, velMj);
+
+  analogWrite(MR_PWM, velMj);
+
+  delay(600);
+
+}
+
+----------------------------------------------------->>> I have made a path that follows quadratic lines, which forms a stair-step
+
+
+
+
+
+4th modification
+
+I found out that the motors of the robot tend to go into a slightly left direction, making the 90 degree turns less accurate, and so I thought of a solution: adding more speed to the left motor so that it compensates for the direction.
+
+void front()  // this makes the car go straight  
+
+{
+
+  digitalWrite(ML_Ctrl, HIGH);
+
+  digitalWrite(MR_Ctrl, LOW); 
+
+  analogWrite(ML_PWM, velF+40); <<--------------------- here I have added 40 more "units" of speed
+
+  analogWrite(MR_PWM, velF);
+
+  delay(700);
+
+}
+
+
+
+5th modification  
+
+
+
+
+
+void stop(){               --------------------------------------->>>> I added the stop() function that pauses the loop for 1000 seconds, about 15 minutes
+
+  digitalWrite(ML_Ctrl, LOW);
+
+  digitalWrite(MR_Ctrl, LOW); 
+
+  analogWrite(ML_PWM, 0);
+
+  analogWrite(MR_PWM, 0);
+
+  delay(1000000); ----------------->> 1000 sec
+
+}
+
+pausing the loop is not a problem, because I can click the restart button, and it will restart the program
+
+
+
+6th modification
+
+
+
+void loop() {
+
+  turns();
+
+  stop();
+
+}
+
+void turns()         -----------------> simplified the loop information
+
+{
+
+  front();
+
+  turn90R();
+
+  front();
+
+  turn90L();
+
+  front();
+
+}
+
+
+
+7th modification 
+
+
+void halfCircle(){
+
+  digitalWrite(ML_Ctrl, HIGH);  // Left motor forward
+
+  digitalWrite(MR_Ctrl, LOW);   // Right motor forward
+
+
+
+  analogWrite(ML_PWM, 170);     // Left motor ON
+
+  analogWrite(MR_PWM, 0);       // Right motor OFF
+
+  delay(3000);
+
+
+
+------------------------------------------------------------------>>> I wanted to make the robot make a U-turn and go backwards, but during the tests, it turned out that it didn't make the turn; it went just straightforward.
+
+
+
+8th modification
+
+
+
+I search in the Arduino main page for some help in the reference documentation and found out that there is another way to create a circle https://docs.arduino.cc/language-reference/en/structure/control-structure/for/
+
+void loop() {
+
+  U_turn();
+
+}
+
+void U_turn()  {        U turn
+
+  
+
+  for (int x = 0; x < 20; x++)
+
+  {
+
+quickFW();
+
+quickTL();
+
+  }
+
+}
+
+
+
+void quickFW()    {
+
+  digitalWrite(ML_Ctrl, HIGH);  
+
+  digitalWrite(MR_Ctrl, LOW);  
+
+  analogWrite(ML_PWM, 120);    
+
+  analogWrite(MR_PWM, 120);
+
+  delay(130);         
+
+}
+
+
+
+void quickTL()    {
+
+  digitalWrite(ML_Ctrl, LOW);  
+
+  digitalWrite(MR_Ctrl, LOW);  
+
+  analogWrite(ML_PWM, 120);    
+
+  analogWrite(MR_PWM, 120);
+
+  delay(50);   
+
+
+
+}
+
+--------------------------------->>> With this code, the robot is going to do a succesful circle lap
