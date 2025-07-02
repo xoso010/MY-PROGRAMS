@@ -8,7 +8,7 @@ byte PinEntry = 9;
 
 
 
-void setup()
+    void setup()
 
 {
 
@@ -16,7 +16,7 @@ void setup()
 
 }
 
-void loop()  
+    void loop()  
 
 {  digitalWrite(PinEntry, HIGH);   
 
