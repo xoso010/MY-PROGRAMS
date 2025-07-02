@@ -82,10 +82,8 @@ I started with the LED blink project
     }
 
 
-
-    void loop()   {   
-
 //          ******************** MAIN LED BEATS ******************** 
+    void loop()   {   
 
     Part_1();
     Final_part();    
@@ -95,7 +93,6 @@ I started with the LED blink project
 
 
 //          ******************** RUNNING FUNCTIONS ******************** 
-
 
 
 
